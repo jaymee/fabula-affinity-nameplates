@@ -1,6 +1,6 @@
 # Fabula Ultima Affinity Nameplates
 
-A Foundry VTT **Version 13** module for **Project FU** (`projectfu`), with optional Token Nameplates and Bar Brawl integration. Version **0.4.0** displays the supplied elemental icons alongside **VU**, **AB**, **IM**, or **RS**, with live updates and per-token visibility.
+A Foundry VTT **Version 13** module for **Project FU** (`projectfu`). Version **0.4.1** displays the supplied elemental icons alongside **VU**, **AB**, **IM**, or **RS**, with live updates and per-token visibility.
 
 ## Install or update
 
@@ -10,7 +10,7 @@ A Foundry VTT **Version 13** module for **Project FU** (`projectfu`), with optio
    `https://github.com/jaymee/fabula-affinity-nameplates/releases/latest/download/manifest.json`
 
 3. Open a Project FU world and enable **Fabula Ultima Affinity Nameplates** in **Manage Modules**.
-4. Have the GM connect first. New and unconfigured tokens/prototypes are disabled. Explicitly enabled tokens from older versions remain enabled; inspect their reveal selections before play.
+4. Have the GM connect first. New prototypes have **Show Affinities** enabled with every element unchecked, so no affinity is revealed until the GM selects it. Saved token and prototype choices are preserved.
 
 For future releases, use Foundry's **Check for Updates** / **Update** controls. The stable manifest points to the latest release; each release downloads its matching versioned ZIP. The installed file remains `module.json`, as Foundry requires.
 
@@ -25,10 +25,10 @@ As a GM, open a token's **Token Configuration**. In **Identity → Affinity Name
 - Setting it in an actor's **Prototype Token** configuration controls newly created tokens; existing tokens retain their own flags.
 - Reveal controls are shown only to GMs. Players do not receive the checkbox, even on owned tokens or their actor’s prototype, and normal player edits to module visibility flags are blocked.
 - To reveal just one affinity: enable **Show Affinities**, click **Clear All**, check one element (for example, Fire), and save. Later, check another element and save to reveal it too. Uncheck an element to hide it again. **Select All** reveals all non-neutral affinities.
-- Selections are per token and also available on Prototype Token. New/unconfigured prototypes start disabled with no selected elements. Previously explicitly enabled tokens without selections preserve their all-elements behavior until the GM changes it.
+- Selections are per token and also available on Prototype Token. New/unconfigured prototypes start with **Show Affinities** enabled and no selected elements. Previously explicitly enabled tokens without selections preserve their all-elements behavior until the GM changes it.
 - Only selected, non-neutral affinities appear to players who can see the token, without requiring actor ownership or a Party/Study profile. Hidden tokens and tokens outside normal vision remain hidden. Neutral values produce no label, even when selected.
 - These controls support the GM's manual reveal decisions; they do not automate the Study action or decide what the rules reveal.
-- An absent enabled flag now means disabled. Explicitly saved prototype choices apply to newly created tokens; existing placed tokens keep their own flags.
+- Newly placed tokens inherit the prototype’s enabled state and element selections. Existing placed tokens keep their saved choices. An older placed token without any configuration remains hidden.
 
 ## Shared GM customization
 
@@ -56,7 +56,7 @@ Shadow angles are degrees clockwise: 0° right, 90° down, 180° left, 270° up.
 
 Affinity codes sit one pixel from the icon artwork. Transparent shadow/outline margins no longer create large gaps inside each pair. **Element Word Spacing** controls the space between pairs without changing font size.
 
-The default is a single line, even when it extends beyond the token width. Enable **Wrap Elements** to wrap between complete icon/code pairs; an icon is never separated from its code. Automatic placement avoids visible nameplates and Bar Brawl bars using the affinity artwork/text body. Your horizontal and vertical padding is applied afterward as an explicit override; it is never cancelled by collision avoidance.
+The default is a single line, even when it extends beyond the token width. Enable **Wrap Elements** to wrap between complete icon/code pairs; an icon is never separated from its code. Automatic placement avoids visible names and resource bars using the affinity artwork/text body. Your horizontal and vertical padding is applied afterward as an explicit override; it is never cancelled by collision avoidance.
 
 ## Affinity mapping and rules
 
@@ -82,51 +82,10 @@ The active GM coalesces snapshot updates after actor, token, ActorDelta, item, a
 
 A GM must be connected to publish new values. Already published snapshots persist when the GM disconnects; the next active GM resynchronizes the active scene. If the GM is privately viewing an inactive scene, it is not automatically bootstrapped for players. Explicit GM token updates can still publish an individual reveal.
 
-## Token Nameplates compatibility
+## Requirements
 
-The module reads public plate references and measures their rendered bounds, including externally parented labels. It does not replace token classes, patch core rendering methods, or add anything to Token Nameplates' own collections.
-
-Affinity visibility is independent of token names and other nameplates. Setting the token name to **Never Displayed** leaves affinities visible when the per-token Show Affinities flag and token/disclosure rules permit them.
-
-**After Same-Side Nameplates** anchors follow only the matching directional stack. If that side has no visible labels, the affinity plate uses that token edge. A top-only nameplate can never pull a Bottom affinity plate onto the top. **Token** anchors use the selected token edge directly. Both modes still avoid collisions with visible labels.
-
-A lightweight watcher runs while Token Nameplates or Bar Brawl is active. It compares geometry signatures and remeasures only when a label or transform changes. Textures are reused; icon PNGs load once, and styled textures are shared between matching displays. Outdated asynchronous loads cannot revive deleted labels.
-
-**Draw-order limit:** when Token Nameplates uses `placeAbovePlaceables`, its labels can occupy a higher canvas parent. This module's text and sprites remain direct token children, so they follow the geometry but do not automatically share the higher draw order. Other overlays may cover them.
-
-## Bar Brawl compatibility
-
-The adapter inspects the visible bar containers in `token.bars`, measures their bounds in token-local coordinates, and reserves space beyond the outermost visible bar on the selected side. Bar labels and rotated side bars are included in those bounds. Hidden bars, zero-opacity bars, and hidden parent containers reserve no space.
-
-The plate clears bars even when they are farther outside the token than the initial label position. A geometry watcher tracks new bar containers, movement, redraws, and hover/control visibility changes, including asynchronous bar rendering. It runs when Bar Brawl is active even if Token Nameplates is disabled. Both modules' obstacles are considered together. No Bar Brawl methods are patched, and its visibility rules are left intact.
-
-**Tighter bar spacing:** set Clearance from Names / Bars to 0–2. For further adjustment, use small negative Vertical Padding values such as -1 or -2; they move the plate up immediately. The existing `spacing` setting key is retained, so an explicitly saved old value is preserved when upgrading.
-
-Source baseline: **Bar Brawl 1.9.0**, declaring minimum Foundry 13.341 and verified 13.351. The actual release source was inspected; automated/browser checks use matching PIXI bar-container fixtures. A real-world integration check with the user's installed Bar Brawl version remains necessary. Levels3D rendering is outside this module's 2D canvas scope.
-
-## Requirements and validation
-
-- Foundry VTT **13**; Project FU **4.16.3** or a later V13 release preserving that affinity model.
-- Token Nameplates and Bar Brawl are optional. Adapter source baseline: its source retrieved 2026-10-25.
-- No runtime dependency, custom sockets, build step, libWrapper, or font download is required.
-- Version 0.4.0 passes 85 automated tests and 37 real PIXI 7.4.3 browser checks. The browser checks include actual PNG loading, translucent shadow/outline pixels, configuration field injection, per-token flags, geometry, and live hook updates.
-- Previous versions were tested by the user in Foundry. Each release still requires a real GM-plus-player world check of form submission, world-setting propagation, system effects, vision, Token Nameplates, and Bar Brawl. See [TESTING.md](TESTING.md).
-
-## Diagnostics and development
-
-```js
-game.modules.get("fabula-affinity-nameplates").api.diagnostics()
-game.modules.get("fabula-affinity-nameplates").api.refresh()
-```
-
-Diagnostics reports versions and counts, without affinity contents. Refresh rereads shared settings and the current GM/local or player/published display data without drawing tokens or the canvas.
-
-```sh
-npm test
-npm run package
-```
-
-Node 20+ runs the dependency-free tests. Python 3 creates the ZIP and checksum in `dist/`, verifies imports and translations, and includes runtime files and documentation only. The source-only browser harness uses PIXI 7.4.3 from jsDelivr; installed modules use Foundry's bundled PIXI and the installed Project FU icons. For browser tests, run `python3 tools/serve_tests.py --projectfu /path/to/projectfu`, then open `http://localhost:8768/tests/browser.html`.
+- Foundry VTT **13**.
+- Project FU **4.16.3** or a later V13 release using the same affinity data and icons.
 
 ## Attribution and references
 
@@ -137,10 +96,4 @@ Project FU describes itself as an independent, unofficial implementation. This m
 - [Foundry V13 Token API](https://foundryvtt.com/api/v13/classes/foundry.canvas.placeables.Token.html)
 - [Foundry V13 TokenConfig API](https://foundryvtt.com/api/v13/classes/foundry.applications.sheets.TokenConfig.html)
 - [Project FU v4.16.3](https://github.com/League-of-Fabulous-Developers/FoundryVTT-Fabula-Ultima/tree/v4.16.3)
-- [Token Nameplates](https://git.gay/unarekin/FoundryVTT-Token-Nameplates)
-- [Bar Brawl source](https://gitlab.com/woodentavern/foundryvtt-bar-brawl)
 - Fabula Ultima Core Rulebook, p. 92 and the Study action; applicable publisher errata.
-
-## Publishing a release
-
-Update the version in `module.json` and `package.json`, and update the version-specific `download` URL in `module.json`. Run `npm test` and `npm run package`, commit, then push a matching tag such as `v0.4.0`. The release workflow validates the tag and publishes the ZIP, checksum, `module.json`, and identical `manifest.json` alias. Keep the stable `manifest` URL unchanged.

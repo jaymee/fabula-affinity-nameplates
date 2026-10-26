@@ -35,7 +35,7 @@ for key in ["VU", "RS", "IM", "AB"]:
 for key in ["font", "shadow", "outline", "positioning"]:
     assert translation_exists("FAN.groups." + key)
 
-runtime = [ROOT / name for name in ["module.json", "README.md", "TESTING.md", "LICENSE", "ASSET_NOTICE.md", "CHANGELOG.md"]]
+runtime = [ROOT / name for name in ["module.json", "README.md", "LICENSE", "ASSET_NOTICE.md", "CHANGELOG.md"]]
 runtime += sorted((ROOT / "scripts").glob("*.mjs")) + sorted((ROOT / "lang").glob("*.json"))
 for source in (ROOT / "scripts").glob("*.mjs"):
     for imported in re.findall(r'from\s+["\'](\.[^"\']+)["\']', source.read_text()):

@@ -98,15 +98,15 @@
       "rightToken": "Right · Token"
     },
     "elements": {
-      "physical": "PHY",
-      "air": "AIR",
-      "bolt": "BLT",
-      "dark": "DRK",
-      "earth": "EAR",
-      "fire": "FIR",
-      "ice": "ICE",
-      "light": "LGT",
-      "poison": "PSN"
+      "physical": "Physical",
+      "air": "Air",
+      "bolt": "Bolt",
+      "dark": "Dark",
+      "earth": "Earth",
+      "fire": "Fire",
+      "ice": "Ice",
+      "light": "Light",
+      "poison": "Poison"
     },
     "affinities": {
       "VU": "VU",
@@ -117,7 +117,7 @@
     "token": {
       "legend": "Affinity Nameplate",
       "enabled": "Show Affinities",
-      "hint": "GM only. Reveals this token’s non-neutral affinities to all players who can see the token. Save to apply. Prototype Token sets the default for future tokens."
+      "hint": "GM only. Reveal selected non-neutral affinities to players who can see this token. Save to apply. Prototype Token sets the default for future tokens."
     },
     "groups": {
       "font": "Font",

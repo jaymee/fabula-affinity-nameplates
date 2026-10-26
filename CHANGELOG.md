@@ -1,3 +1,10 @@
+# 0.4.1
+
+- Show full element names in the GM reveal controls.
+- New prototypes enable Show Affinities with all element selections unchecked; scene tokens inherit those defaults without revealing anything.
+- Preserve saved prototype and token choices.
+- Simplify the public README and keep personal integration, validation, and development references local.
+
 # 0.4.0
 
 - GM-only per-element reveal checkboxes, Select All, and Clear All in token/prototype configuration.

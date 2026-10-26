@@ -1,5 +1,6 @@
 import { MODULE_ID, ELEMENTS, localize } from "./constants.mjs";
 import { configuredEnabled, configuredElements, publishedToken } from "./gm-reveals.mjs";
+import { prototypeEnabled } from "./defaults.mjs";
 
 export function tokenEnabled(document) {
   return globalThis.game?.user?.isGM ? configuredEnabled(document) : publishedToken(document)?.enabled === true;
@@ -30,7 +31,7 @@ export function renderTokenConfig(application, element) {
   input.type = "checkbox";
   input.name = `flags.${MODULE_ID}.enabled`;
   input.id = `${application.id ?? MODULE_ID}-affinities-enabled`;
-  input.checked = tokenEnabled(document);
+  input.checked = application.isPrototype ? prototypeEnabled(document) : tokenEnabled(document);
   const permissionDocument = application.isPrototype ? application.actor ?? document.parent : document;
   input.disabled = !(permissionDocument?.canUserModify?.(game.user, "update") ?? permissionDocument?.testUserPermission?.(game.user, "OWNER"));
   label.htmlFor = input.id;
@@ -40,17 +41,17 @@ export function renderTokenConfig(application, element) {
   const selected = configuredElements(document);
   const instructions = fieldset.appendChild(element.ownerDocument.createElement("p"));
   instructions.className = "hint";
-  instructions.textContent = "Select the elements to reveal, then save. Unselected elements stay hidden. New tokens are disabled until explicitly enabled.";
+  instructions.textContent = "Select the elements to reveal, then save. Unselected elements stay hidden. New prototypes enable Show Affinities with no elements selected.";
   const choices = fieldset.appendChild(element.ownerDocument.createElement("div"));
   choices.style.cssText = "display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px";
-  for (const [key, fallback] of ELEMENTS) {
+  for (const [key] of ELEMENTS) {
     const choice = choices.appendChild(element.ownerDocument.createElement("label"));
     const checkbox = choice.appendChild(element.ownerDocument.createElement("input"));
     checkbox.type = "checkbox";
     checkbox.name = `flags.${MODULE_ID}.revealedElements.${key}`;
     checkbox.checked = selected.has(key);
     checkbox.disabled = input.disabled;
-    choice.appendChild(element.ownerDocument.createTextNode(" " + localize(`elements.${key}`, fallback)));
+    choice.appendChild(element.ownerDocument.createTextNode(" " + localize(`elements.${key}`, key[0].toUpperCase() + key.slice(1))));
   }
   for (const [text, checked] of [["Select All", true], ["Clear All", false]]) {
     const button = fieldset.appendChild(element.ownerDocument.createElement("button"));

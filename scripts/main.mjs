@@ -1,9 +1,10 @@
+import { initializePrototype, initializeToken, prototypeEnabled } from "./defaults.mjs";
 import { MODULE_ID, localize } from "./constants.mjs";
 import { registerSettings, migrateWorldStyles, syncSettingsVisibility } from "./settings.mjs";
 import { OverlayManager } from "./overlay.mjs";
 import { renderTokenConfig } from "./token-config.mjs";
 import { renderSettingsConfig, closeSettingsConfig } from "./settings-ui.mjs";
-import { GMRevealPublisher, configuredEnabled, guardRevealUpdate, isPublisher } from "./gm-reveals.mjs";
+import { GMRevealPublisher, guardRevealUpdate, isPublisher } from "./gm-reveals.mjs";
 
 let manager;
 const publisher = new GMRevealPublisher();
@@ -51,10 +52,12 @@ Hooks.on("updateToken", (document, _changes, _options, userId) => {
   if (document.object) manager?.refreshToken(document.object);
   publisher.queue(document, { visibility: gmUpdate(userId) });
 });
+Hooks.on("preCreateActor", actor => { if (manager) initializePrototype(actor); });
+Hooks.on("preCreateToken", document => { if (manager) initializeToken(document); });
 Hooks.on("createToken", (document, _options, userId) => {
   const fromGM = gmUpdate(userId);
   publisher.queue(document, {
-    visibility: fromGM || configuredEnabled(document.actor?.prototypeToken),
+    visibility: fromGM || (!!document.actor?.prototypeToken && prototypeEnabled(document.actor.prototypeToken)),
     authority: fromGM ? document : document.actor?.prototypeToken
   });
 });

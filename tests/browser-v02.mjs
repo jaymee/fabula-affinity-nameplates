@@ -269,10 +269,16 @@ try {
     delete first.document.flags[MODULE_ID].revealedElements; Hooks.callAll("updateToken",first.document);
     await settle(() => ready(first) && labels(first).length === 3);
   });
-  await check("unconfigured prototype controls default to disabled with no selected elements", () => {
+  await check("unconfigured prototype controls enable the plate with no selected elements", () => {
     const form = document.createElement("form");
     Hooks.callAll("renderPrototypeTokenConfig", { isPrototype:true, token:{flags:{}}, actor:{canUserModify:()=>true} }, form);
-    assert(form.querySelectorAll("input").length === 10 && ![...form.querySelectorAll("input")].some(input=>input.checked), "Unsafe prototype defaults");
+    assert(form.querySelectorAll("input").length === 10 && form.querySelector(`input[name="flags.${MODULE_ID}.enabled"]`).checked && ![...form.querySelectorAll('input[name*="revealedElements"]')].some(input=>input.checked), "Unsafe prototype defaults");
+  });
+  await check("reveal controls use full element names without translations", () => {
+    const form = document.createElement("form");
+    Hooks.callAll("renderTokenConfig", {token:first.document}, form);
+    const names=[...form.querySelectorAll('input[name*="revealedElements"]')].map(input=>input.parentElement.textContent.trim());
+    assert(names.join() === "Physical,Air,Bolt,Dark,Earth,Fire,Ice,Light,Poison", "Element labels are abbreviated: " + names.join());
   });
   await check("Prototype Token configuration reads its own flag and actor edit permission", () => {
     const form = document.createElement("form");
