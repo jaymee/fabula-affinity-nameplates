@@ -1,0 +1,26 @@
+name: Release module
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate release version
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          node --input-type=module -e 'import fs from "node:fs"; const m=JSON.parse(fs.readFileSync("module.json")); const p=JSON.parse(fs.readFileSync("package.json")); if(process.env.RELEASE_TAG !== `v${m.version}` || p.version !== m.version || !m.download.includes(`/v${m.version}/`)) process.exit(1);'
+      - run: npm test
+      - run: npm run package
+      - name: Publish release assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: gh release create "$RELEASE_TAG" dist/*.zip dist/*.sha256 dist/module.json dist/manifest.json --title "$RELEASE_TAG" --generate-notes

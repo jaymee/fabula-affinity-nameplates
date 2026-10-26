@@ -1,0 +1,129 @@
+{
+  "FAN": {
+    "unsupported": "Affinity Nameplates requires Foundry VTT 13 and the Project FU system.",
+    "settings": {
+      "fontFamily": {
+        "name": "Font: Family",
+        "hint": "Font available in Foundry or your browser, for example Signika. Unavailable fonts use the browser fallback."
+      },
+      "fontSize": {
+        "name": "Font: Size",
+        "hint": "Affinity code font size, 8–48 canvas pixels. Icons scale with the font."
+      },
+      "textColor": {
+        "name": "Font: Color",
+        "hint": "Six-digit hex color for the affinity codes, for example #FFFFFF. Icons retain their supplied colors."
+      },
+      "textOpacity": {
+        "name": "Text Opacity",
+        "hint": "0% is invisible; 100% is fully opaque. Applies to icons and codes, including their effects."
+      },
+      "placement": {
+        "name": "Section and Anchor",
+        "hint": "Choose the affinity plate side independently of nameplate visibility. Nameplate anchors follow only labels on the selected side; an empty side falls back to the token edge."
+      },
+      "spacing": {
+        "name": "Clearance from Names / Bars",
+        "hint": "Gap in canvas pixels from the affinity artwork/text to nearby nameplates or bars. Shadows do not add clearance. Use 0–2 for a tight fit. Manual padding is applied after automatic placement."
+      },
+      "paddingX": {
+        "name": "Horizontal Padding",
+        "hint": "Final horizontal offset after automatic bar/nameplate clearance. Positive moves right; negative moves left. Fractional values and intentional overlap are allowed."
+      },
+      "paddingY": {
+        "name": "Vertical Padding",
+        "hint": "Final vertical offset after automatic bar/nameplate clearance. Positive moves down; negative moves up, including small negative values. Fractional values and intentional overlap are allowed."
+      },
+      "shadowEnabled": {
+        "name": "Drop Shadow: Enabled",
+        "hint": "Apply a shadow to both the icons and affinity codes."
+      },
+      "shadowColor": {
+        "name": "Drop Shadow: Color",
+        "hint": "Six-digit hex shadow color, for example #000000."
+      },
+      "shadowDistance": {
+        "name": "Drop Shadow: Distance",
+        "hint": "Shadow offset in canvas pixels before zoom."
+      },
+      "shadowAngle": {
+        "name": "Drop Shadow: Angle",
+        "hint": "Degrees clockwise: 0° right, 90° down, 180° left, 270° up."
+      },
+      "shadowTransparency": {
+        "name": "Drop Shadow: Transparency",
+        "hint": "0% is fully opaque; 100% is invisible. Multiplied by Text Opacity."
+      },
+      "outlineEnabled": {
+        "name": "Outline: Enabled",
+        "hint": "Outline the icons and affinity codes."
+      },
+      "outlineColor": {
+        "name": "Outline: Color",
+        "hint": "Six-digit hex outline color. Used when disposition coloring is disabled."
+      },
+      "outlineUseDisposition": {
+        "name": "Outline: Use Token Disposition",
+        "hint": "Use Foundry’s token disposition color instead of the custom outline color."
+      },
+      "outlineThickness": {
+        "name": "Outline: Thickness",
+        "hint": "Outline stroke width in canvas pixels before zoom, 0–12."
+      },
+      "outlineTransparency": {
+        "name": "Outline: Transparency",
+        "hint": "0% is fully opaque; 100% is invisible. Multiplied by Text Opacity."
+      },
+      "shadowBlur": {
+        "name": "Drop Shadow: Blur",
+        "hint": "Shadow softness in canvas pixels before zoom. Zero gives a sharp shadow. Blur changes the effect without changing plate spacing or position."
+      },
+      "elementSpacing": {
+        "name": "Element Word Spacing",
+        "hint": "Space between complete icon/code pairs in canvas pixels. Zero is the most condensed; larger values spread the elements apart."
+      },
+      "wrapElements": {
+        "name": "Wrap Elements",
+        "hint": "Off keeps all affinities on one line. Enable to wrap between complete icon/code pairs at the token-relative width."
+      }
+    },
+    "placements": {
+      "belowNameplates": "Bottom · After Same-Side Nameplates",
+      "aboveNameplates": "Top · After Same-Side Nameplates",
+      "leftNameplates": "Left · After Same-Side Nameplates",
+      "rightNameplates": "Right · After Same-Side Nameplates",
+      "belowToken": "Bottom · Token",
+      "aboveToken": "Top · Token",
+      "leftToken": "Left · Token",
+      "rightToken": "Right · Token"
+    },
+    "elements": {
+      "physical": "PHY",
+      "air": "AIR",
+      "bolt": "BLT",
+      "dark": "DRK",
+      "earth": "EAR",
+      "fire": "FIR",
+      "ice": "ICE",
+      "light": "LGT",
+      "poison": "PSN"
+    },
+    "affinities": {
+      "VU": "VU",
+      "RS": "RS",
+      "IM": "IM",
+      "AB": "AB"
+    },
+    "token": {
+      "legend": "Affinity Nameplate",
+      "enabled": "Show Affinities",
+      "hint": "GM only. Reveals this token’s non-neutral affinities to all players who can see the token. Save to apply. Prototype Token sets the default for future tokens."
+    },
+    "groups": {
+      "font": "Font",
+      "shadow": "Drop Shadow",
+      "outline": "Outline",
+      "positioning": "Positioning"
+    }
+  }
+}

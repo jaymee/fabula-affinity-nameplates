@@ -1,0 +1,42 @@
+{
+  "id": "fabula-affinity-nameplates",
+  "title": "Fabula Ultima Affinity Nameplates",
+  "description": "Live damage affinity sub-nameplates for Project FU on Foundry VTT 13, with Token Nameplates placement support.",
+  "version": "0.4.0",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13",
+    "maximum": "13"
+  },
+  "authors": [
+    {
+      "name": "Fabula Affinity Nameplates contributors"
+    }
+  ],
+  "esmodules": [
+    "scripts/main.mjs"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "relationships": {
+    "systems": [
+      {
+        "id": "projectfu",
+        "type": "system",
+        "compatibility": {
+          "minimum": "4.16.3"
+        }
+      }
+    ]
+  },
+  "readme": "README.md",
+  "license": "LICENSE",
+  "url": "https://github.com/jaymee/fabula-affinity-nameplates",
+  "manifest": "https://github.com/jaymee/fabula-affinity-nameplates/releases/latest/download/manifest.json",
+  "download": "https://github.com/jaymee/fabula-affinity-nameplates/releases/download/v0.4.0/fabula-affinity-nameplates-0.4.0.zip"
+}
