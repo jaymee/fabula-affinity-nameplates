@@ -2,6 +2,12 @@ name: Release module
 on:
   push:
     tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing version tag to publish
+        required: true
+        type: string
 permissions:
   contents: write
 jobs:
@@ -9,12 +15,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref_name }}
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - name: Validate release version
         env:
-          RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
         run: |
           node --input-type=module -e 'import fs from "node:fs"; const m=JSON.parse(fs.readFileSync("module.json")); const p=JSON.parse(fs.readFileSync("package.json")); if(process.env.RELEASE_TAG !== `v${m.version}` || p.version !== m.version || !m.download.includes(`/v${m.version}/`)) process.exit(1);'
       - run: npm test
@@ -22,5 +30,5 @@ jobs:
       - name: Publish release assets
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
         run: gh release create "$RELEASE_TAG" dist/*.zip dist/*.sha256 dist/module.json dist/manifest.json --title "$RELEASE_TAG" --generate-notes
